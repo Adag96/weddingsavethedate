@@ -7,8 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Aston Script Bold';
+            src: url('fonts/AstonScriptBold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
         body {
             font-family: 'Cormorant Garamond', serif;
+        }
+        .aston-font {
+            font-family: 'Aston Script Bold', cursive;
         }
         #rsvpForm {
             display: none;
@@ -34,11 +43,14 @@
         }
     </style>
 </head>
-<body class="bg-black">
+<body style="background-color: #6B6A58;">
     <div class="flex justify-center items-start gap-8 px-4 py-8">
         <!-- Left side images -->
         <div class="side-images flex flex-col gap-6 pt-8">
-            <img id="leftImage" class="side-image" src="images/gallery/1.jpg" alt="Photo">
+            <img id="leftImage1" class="side-image" src="images/gallery/10690004 (1).JPG" alt="Photo">
+            <img id="leftImage2" class="side-image" src="images/gallery/10690016.JPG" alt="Photo">
+            <img id="leftImage3" class="side-image" src="images/gallery/50375887-66CA-452A-87CF-1B155DB7FFD2-14545-0000068E7D0122C6.JPG" alt="Photo">
+            <img id="leftImage4" class="side-image" src="images/gallery/74630007.jpeg" alt="Photo">
         </div>
 
         <!-- Main content -->
@@ -54,8 +66,8 @@
 
         <!-- Text Section -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-4">
-                Save the Date
+            <h1 class="text-4xl text-white mb-4 aston-font">
+                Save the date!
             </h1>
             <p class="text-xl text-neutral-300 mb-6">
                 We're to be wed, and we'd be over the moon to have you by our side!
@@ -81,33 +93,33 @@
         </div>
 
         <!-- RSVP Form -->
-        <div id="rsvpForm" class="mt-8 bg-neutral-900 p-8 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-bold text-white mb-6 text-center">RSVP</h2>
+        <div id="rsvpForm" class="mt-8 p-8 rounded-lg shadow-lg" style="background-color: #C6B2AB;">
+            <h2 class="text-2xl font-bold text-neutral-800 mb-6 text-center">RSVP</h2>
             <form id="rsvpSubmitForm" onsubmit="handleSubmit(event)">
                 <!-- Name Question -->
                 <div class="mb-6">
-                    <label class="block text-lg text-neutral-300 mb-2">
+                    <label class="block text-lg text-neutral-800 mb-2">
                         Your name:
                     </label>
                     <input
                         type="text"
                         name="name"
                         required
-                        class="w-full px-4 py-2 rounded bg-neutral-800 text-white border border-neutral-700 focus:border-neutral-500 focus:outline-none"
+                        class="w-full px-4 py-2 rounded bg-white text-black border border-neutral-300 focus:border-neutral-500 focus:outline-none"
                     >
                 </div>
 
                 <!-- Attendance Question -->
                 <div class="mb-6">
-                    <label class="block text-lg text-neutral-300 mb-3">
+                    <label class="block text-lg text-neutral-800 mb-3">
                         Can you attend on October 30th, 2026?
                     </label>
                     <div class="space-y-2">
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="radio" name="attendance" value="Yes, I'll be there" required class="mr-3 w-4 h-4" onchange="toggleAttendingFields(true)">
                             <span>Yes, I'll be there</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="radio" name="attendance" value="Sorry, I can't make it" required class="mr-3 w-4 h-4" onchange="toggleAttendingFields(false)">
                             <span>Sorry, I can't make it</span>
                         </label>
@@ -116,40 +128,40 @@
 
                 <!-- Mailing Address (conditionally shown if attending) -->
                 <div id="mailingAddressField" class="mb-6" style="display: none;">
-                    <label class="block text-lg text-neutral-300 mb-2">
+                    <label class="block text-lg text-neutral-800 mb-2">
                         Your mailing address (deploying our carrier pigeons shortly!):
                     </label>
                     <input
                         type="text"
                         name="mailingAddress"
                         id="mailingAddress"
-                        class="w-full px-4 py-2 rounded bg-neutral-800 text-white border border-neutral-700 focus:border-neutral-500 focus:outline-none"
+                        class="w-full px-4 py-2 rounded bg-white text-black border border-neutral-300 focus:border-neutral-500 focus:outline-none"
                     >
                 </div>
 
                 <!-- Dietary Restrictions (conditionally shown if attending) -->
                 <div id="dietaryRestrictionsField" class="mb-6" style="display: none;">
-                    <label class="block text-lg text-neutral-300 mb-3">
+                    <label class="block text-lg text-neutral-800 mb-3">
                         Do you have any dietary restrictions?
                     </label>
                     <div class="space-y-2">
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="checkbox" name="dietary" value="None" class="mr-3 w-4 h-4">
                             <span>None</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="checkbox" name="dietary" value="Pescatarian" class="mr-3 w-4 h-4">
                             <span>Pescatarian</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="checkbox" name="dietary" value="Vegan" class="mr-3 w-4 h-4">
                             <span>Vegan</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="checkbox" name="dietary" value="Vegetarian" class="mr-3 w-4 h-4">
                             <span>Vegetarian</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="checkbox" name="dietary" value="Gluten-free" class="mr-3 w-4 h-4">
                             <span>Gluten-free</span>
                         </label>
@@ -158,15 +170,15 @@
 
                 <!-- Hotel Block Question (conditionally shown if attending) -->
                 <div id="hotelBlockField" class="mb-6" style="display: none;">
-                    <label class="block text-lg text-neutral-300 mb-3">
+                    <label class="block text-lg text-neutral-800 mb-3">
                         Are you interested in staying in a hotel block?
                     </label>
                     <div class="space-y-2">
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="radio" name="hotelBlock" value="Yes! Send me information about where to book" class="mr-3 w-4 h-4">
                             <span>Yes! Send me information about where to book</span>
                         </label>
-                        <label class="flex items-center text-neutral-400 cursor-pointer">
+                        <label class="flex items-center text-neutral-700 cursor-pointer">
                             <input type="radio" name="hotelBlock" value="No! I'll find a hotel/Airbnb/local stay on my own" class="mr-3 w-4 h-4">
                             <span>No! I'll find a hotel/Airbnb/local stay on my own</span>
                         </label>
@@ -175,13 +187,13 @@
 
                 <!-- Additional Notes -->
                 <div class="mb-6">
-                    <label class="block text-lg text-neutral-300 mb-2">
+                    <label class="block text-lg text-neutral-800 mb-2">
                         Anything else we should know? (Disability accommodations, Samhain ritual requests, etc.)
                     </label>
                     <textarea
                         name="additionalNotes"
                         rows="4"
-                        class="w-full px-4 py-2 rounded bg-neutral-800 text-white border border-neutral-700 focus:border-neutral-500 focus:outline-none resize-vertical"
+                        class="w-full px-4 py-2 rounded bg-white text-black border border-neutral-300 focus:border-neutral-500 focus:outline-none resize-vertical"
                     ></textarea>
                 </div>
 
@@ -202,49 +214,104 @@
 
         <!-- Right side images -->
         <div class="side-images flex flex-col gap-6 pt-8">
-            <img id="rightImage" class="side-image" src="images/gallery/2.jpg" alt="Photo">
+            <img id="rightImage1" class="side-image" src="images/gallery/cinestill_400d_06_29_2024_000311290031.jpg" alt="Photo">
+            <img id="rightImage2" class="side-image" src="images/gallery/cinestill_400d_08_27_2024_000115900002.jpg" alt="Photo">
+            <img id="rightImage3" class="side-image" src="images/gallery/FDCB4890-9CF2-4729-8BB0-76A8D2223851.JPG" alt="Photo">
+            <img id="rightImage4" class="side-image" src="images/gallery/IMG_0136.jpg" alt="Photo">
         </div>
     </div>
 
     <script>
         // Image rotation for side galleries
         const galleryImages = [
-            'images/gallery/1.jpg',
-            'images/gallery/2.jpg',
-            'images/gallery/3.jpg',
-            'images/gallery/4.jpg',
-            'images/gallery/5.jpg',
-            'images/gallery/6.jpg'
-            // Add more image paths as needed
+            'images/gallery/10690004 (1).JPG',
+            'images/gallery/10690016.JPG',
+            'images/gallery/50375887-66CA-452A-87CF-1B155DB7FFD2-14545-0000068E7D0122C6.JPG',
+            'images/gallery/74630007.jpeg',
+            'images/gallery/cinestill_400d_06_29_2024_000311290031.jpg',
+            'images/gallery/cinestill_400d_08_27_2024_000115900002.jpg',
+            'images/gallery/FDCB4890-9CF2-4729-8BB0-76A8D2223851.JPG',
+            'images/gallery/IMG_0136.jpg',
+            'images/gallery/IMG_0400.jpg',
+            'images/gallery/IMG_0783.jpg',
+            'images/gallery/IMG_1265.jpg',
+            'images/gallery/IMG_1733.JPG',
+            'images/gallery/IMG_1833.JPG',
+            'images/gallery/IMG_1954.jpg',
+            'images/gallery/IMG_2015.JPG',
+            'images/gallery/IMG_2225.jpg',
+            'images/gallery/IMG_2495.JPG',
+            'images/gallery/IMG_2971.jpg',
+            'images/gallery/IMG_3034.jpg',
+            'images/gallery/IMG_3403.jpg',
+            'images/gallery/IMG_3591.jpg',
+            'images/gallery/IMG_5222.jpg',
+            'images/gallery/IMG_5562.jpeg',
+            'images/gallery/IMG_7853.JPG',
+            'images/gallery/IMG_7960.jpg',
+            'images/gallery/IMG_7962.jpg',
+            'images/gallery/IMG_7963.jpg',
+            'images/gallery/IMG_7964.jpg',
+            'images/gallery/IMG_7965.jpg',
+            'images/gallery/IMG_7966.jpg',
+            'images/gallery/IMG_7967.jpg',
+            'images/gallery/IMG_7968.jpg',
+            'images/gallery/IMG_7969.jpg',
+            'images/gallery/IMG_7971.jpg',
+            'images/gallery/IMG_7972.jpg',
+            'images/gallery/IMG_8480.JPG',
+            'images/gallery/IMG_8713.jpg',
+            'images/gallery/IMG_8952.JPG',
+            'images/gallery/IMG_9700.JPG',
+            'images/gallery/IMG_9955.jpg'
         ];
 
-        let currentLeftIndex = 0;
-        let currentRightIndex = 1;
+        let currentIndices = [0, 1, 2, 3, 4, 5, 6, 7];
+        let rotationPhase = 0; // 0 = rows 2&4, 1 = rows 1&3
 
         function rotateImages() {
-            const leftImage = document.getElementById('leftImage');
-            const rightImage = document.getElementById('rightImage');
+            const images = [
+                document.getElementById('leftImage1'),
+                document.getElementById('leftImage2'),
+                document.getElementById('leftImage3'),
+                document.getElementById('leftImage4'),
+                document.getElementById('rightImage1'),
+                document.getElementById('rightImage2'),
+                document.getElementById('rightImage3'),
+                document.getElementById('rightImage4')
+            ];
 
-            // Fade out
-            leftImage.classList.add('fade');
-            rightImage.classList.add('fade');
+            if (rotationPhase === 0) {
+                // Rotate rows 2 and 4 (indices 1, 3, 5, 7)
+                [1, 3, 5, 7].forEach(i => images[i].classList.add('fade'));
 
-            setTimeout(() => {
-                // Update indices
-                currentLeftIndex = (currentLeftIndex + 2) % galleryImages.length;
-                currentRightIndex = (currentRightIndex + 2) % galleryImages.length;
+                setTimeout(() => {
+                    [1, 3, 5, 7].forEach(i => {
+                        currentIndices[i] = (currentIndices[i] + 8) % galleryImages.length;
+                        images[i].src = galleryImages[currentIndices[i]];
+                    });
 
-                // Update sources
-                leftImage.src = galleryImages[currentLeftIndex];
-                rightImage.src = galleryImages[currentRightIndex];
+                    [1, 3, 5, 7].forEach(i => images[i].classList.remove('fade'));
+                }, 1000);
+            } else {
+                // Rotate rows 1 and 3 (indices 0, 2, 4, 6)
+                [0, 2, 4, 6].forEach(i => images[i].classList.add('fade'));
 
-                // Fade in
-                leftImage.classList.remove('fade');
-                rightImage.classList.remove('fade');
-            }, 1000);
+                setTimeout(() => {
+                    [0, 2, 4, 6].forEach(i => {
+                        currentIndices[i] = (currentIndices[i] + 8) % galleryImages.length;
+                        images[i].src = galleryImages[currentIndices[i]];
+                    });
+
+                    [0, 2, 4, 6].forEach(i => images[i].classList.remove('fade'));
+                }, 1000);
+            }
+
+            // Toggle rotation phase
+            rotationPhase = 1 - rotationPhase;
         }
 
-        // Rotate images every 5 seconds
+        // Rotate images every 5 seconds (alternating between rows 2&4 and rows 1&3)
         setInterval(rotateImages, 5000);
 
         function showForm() {
