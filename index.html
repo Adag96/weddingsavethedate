@@ -41,10 +41,26 @@
                 display: none;
             }
         }
+        @media (max-width: 768px) {
+            body {
+                padding: 0 !important;
+            }
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            h1 {
+                font-size: 2.5rem !important;
+            }
+            .hero-image {
+                max-height: 500px;
+                object-fit: cover;
+            }
+        }
     </style>
 </head>
 <body style="background-color: #6B6A58;">
-    <div class="flex justify-center items-start gap-8 px-4 py-8">
+    <div class="flex justify-center items-start gap-8 px-2 py-4 md:px-4 md:py-8">
         <!-- Left side images -->
         <div class="side-images flex flex-col gap-6 pt-8">
             <img id="leftImage1" class="side-image" src="images/gallery/10690004 (1).JPG" alt="Photo">
@@ -60,7 +76,7 @@
             <img
                 src="images/Test Photo.png"
                 alt="Adam & Daphne Save the Date"
-                class="w-full object-cover rounded-lg shadow-lg"
+                class="w-full hero-image rounded-lg shadow-lg"
             >
         </div>
 
