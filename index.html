@@ -106,10 +106,47 @@
             .text-lg {
                 font-size: 1.25rem !important;
             }
+
+            /* Mobile horizontal gallery */
+            .mobile-gallery {
+                display: flex;
+                gap: 0.75rem;
+                overflow-x: auto;
+                padding: 1rem 1.5rem;
+                margin: 0 -1.5rem 1.5rem -1.5rem;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+
+            .mobile-gallery::-webkit-scrollbar {
+                display: none; /* Chrome, Safari */
+            }
+
+            .mobile-gallery-image {
+                flex: 0 0 auto;
+                width: 140px;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+                scroll-snap-align: start;
+                transition: opacity 1s ease-in-out;
+            }
+
+            .mobile-gallery-image.fade {
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body style="background-color: #6B6A58;">
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="media/learning with her [Final Master].wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="flex justify-center items-start gap-8 px-2 py-4 md:px-4 md:py-8">
         <!-- Left side images -->
         <div class="side-images flex flex-col gap-6 pt-8">
@@ -151,6 +188,15 @@
             <p class="text-lg text-neutral-400 mb-8">
                 October 30th, 2026
             </p>
+        </div>
+
+        <!-- Mobile Photo Gallery (horizontal scroll) -->
+        <div class="mobile-gallery mobile-only">
+            <img id="mobileGallery1" class="mobile-gallery-image" src="images/gallery/10690004 (1).JPG" alt="Photo">
+            <img id="mobileGallery2" class="mobile-gallery-image" src="images/gallery/cinestill_400d_06_29_2024_000311290031.jpg" alt="Photo">
+            <img id="mobileGallery3" class="mobile-gallery-image" src="images/gallery/IMG_0400.jpg" alt="Photo">
+            <img id="mobileGallery4" class="mobile-gallery-image" src="images/gallery/IMG_1733.JPG" alt="Photo">
+            <img id="mobileGallery5" class="mobile-gallery-image" src="images/gallery/IMG_7960.jpg" alt="Photo">
         </div>
 
         <!-- RSVP Button -->
@@ -295,6 +341,29 @@
     </div>
 
     <script>
+        // Background music auto-play
+        const audio = document.getElementById('backgroundMusic');
+
+        // Try to auto-play on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            audio.play().catch(function(error) {
+                console.log('Auto-play prevented. Music will start on first user interaction.');
+
+                // If auto-play fails, try to play on any user interaction
+                const playOnInteraction = function() {
+                    audio.play().catch(e => console.log('Playback failed:', e));
+                    // Remove listeners after first successful play attempt
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('scroll', playOnInteraction);
+                };
+
+                document.addEventListener('click', playOnInteraction);
+                document.addEventListener('touchstart', playOnInteraction);
+                document.addEventListener('scroll', playOnInteraction);
+            });
+        });
+
         // Image rotation for side galleries
         const galleryImages = [
             'images/gallery/10690004 (1).JPG',
@@ -386,6 +455,41 @@
 
         // Rotate images every 5 seconds (alternating between rows 2&4 and rows 1&3)
         setInterval(rotateImages, 5000);
+
+        // Mobile gallery rotation
+        let mobileCurrentIndices = [0, 1, 2, 3, 4];
+        let mobileRotationIndex = 0;
+
+        function rotateMobileGallery() {
+            const mobileImages = [
+                document.getElementById('mobileGallery1'),
+                document.getElementById('mobileGallery2'),
+                document.getElementById('mobileGallery3'),
+                document.getElementById('mobileGallery4'),
+                document.getElementById('mobileGallery5')
+            ];
+
+            // Only rotate if elements exist (i.e., on mobile)
+            if (!mobileImages[0]) return;
+
+            // Fade out the current image
+            mobileImages[mobileRotationIndex].classList.add('fade');
+
+            setTimeout(() => {
+                // Update to next image in gallery
+                mobileCurrentIndices[mobileRotationIndex] = (mobileCurrentIndices[mobileRotationIndex] + 5) % galleryImages.length;
+                mobileImages[mobileRotationIndex].src = galleryImages[mobileCurrentIndices[mobileRotationIndex]];
+
+                // Fade back in
+                mobileImages[mobileRotationIndex].classList.remove('fade');
+            }, 1000);
+
+            // Move to next position for next rotation
+            mobileRotationIndex = (mobileRotationIndex + 1) % 5;
+        }
+
+        // Rotate one mobile gallery image every 3 seconds
+        setInterval(rotateMobileGallery, 3000);
 
         function showForm() {
             document.getElementById('rsvpButton').style.display = 'none';
