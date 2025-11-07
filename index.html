@@ -197,6 +197,8 @@
             <img id="mobileGallery3" class="mobile-gallery-image" src="images/gallery/IMG_0400.jpg" alt="Photo">
             <img id="mobileGallery4" class="mobile-gallery-image" src="images/gallery/IMG_1733.JPG" alt="Photo">
             <img id="mobileGallery5" class="mobile-gallery-image" src="images/gallery/IMG_7960.jpg" alt="Photo">
+            <img id="mobileGallery6" class="mobile-gallery-image" src="images/gallery/IMG_2495.JPG" alt="Photo">
+            <img id="mobileGallery7" class="mobile-gallery-image" src="images/gallery/IMG_7965.jpg" alt="Photo">
         </div>
 
         <!-- RSVP Button -->
@@ -343,24 +345,35 @@
     <script>
         // Background music auto-play
         const audio = document.getElementById('backgroundMusic');
+        let musicStarted = false;
+
+        // Function to start music
+        const startMusic = function() {
+            if (musicStarted) return;
+
+            audio.play().then(() => {
+                musicStarted = true;
+                console.log('Music started successfully');
+                // Remove all listeners after successful play
+                document.removeEventListener('click', startMusic, true);
+                document.removeEventListener('touchstart', startMusic, true);
+                document.removeEventListener('scroll', startMusic, true);
+                document.removeEventListener('keydown', startMusic, true);
+                document.removeEventListener('mousemove', startMusic, true);
+            }).catch(e => console.log('Playback failed:', e));
+        };
 
         // Try to auto-play on page load
         document.addEventListener('DOMContentLoaded', function() {
             audio.play().catch(function(error) {
                 console.log('Auto-play prevented. Music will start on first user interaction.');
 
-                // If auto-play fails, try to play on any user interaction
-                const playOnInteraction = function() {
-                    audio.play().catch(e => console.log('Playback failed:', e));
-                    // Remove listeners after first successful play attempt
-                    document.removeEventListener('click', playOnInteraction);
-                    document.removeEventListener('touchstart', playOnInteraction);
-                    document.removeEventListener('scroll', playOnInteraction);
-                };
-
-                document.addEventListener('click', playOnInteraction);
-                document.addEventListener('touchstart', playOnInteraction);
-                document.addEventListener('scroll', playOnInteraction);
+                // Add multiple interaction listeners with capture phase for better compatibility
+                document.addEventListener('click', startMusic, true);
+                document.addEventListener('touchstart', startMusic, true);
+                document.addEventListener('scroll', startMusic, true);
+                document.addEventListener('keydown', startMusic, true);
+                document.addEventListener('mousemove', startMusic, true);
             });
         });
 
@@ -462,17 +475,22 @@
             document.getElementById('mobileGallery2'),
             document.getElementById('mobileGallery3'),
             document.getElementById('mobileGallery4'),
-            document.getElementById('mobileGallery5')
+            document.getElementById('mobileGallery5'),
+            document.getElementById('mobileGallery6'),
+            document.getElementById('mobileGallery7')
         ];
 
         // Initialize with random images from the gallery
         let mobileCurrentIndices = [];
+        let imageUsageHistory = []; // Track which images have been shown
+
         if (mobileImages[0]) {
-            // Create array of random unique indices
+            // Create array of random unique indices for initial display
             const availableIndices = Array.from({length: galleryImages.length}, (_, i) => i);
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 7; i++) {
                 const randomIndex = Math.floor(Math.random() * availableIndices.length);
                 mobileCurrentIndices.push(availableIndices[randomIndex]);
+                imageUsageHistory.push(availableIndices[randomIndex]);
                 availableIndices.splice(randomIndex, 1);
             }
 
@@ -482,7 +500,56 @@
             });
         }
 
-        let mobileRotationPhase = 0; // 0 = rotate positions 1,3 (indices 1,3), 1 = rotate positions 0,2,4 (indices 0,2,4)
+        let mobileRotationPhase = 0; // 0 = rotate positions with indices 1,3,5; 1 = rotate positions with indices 0,2,4,6
+
+        // Function to get next unique image that's not currently displayed
+        function getNextUniqueImage(currentSlotIndex) {
+            // Get all currently displayed image indices
+            const currentlyDisplayed = new Set(mobileCurrentIndices);
+
+            // Find images not currently displayed
+            let availableImages = [];
+            for (let i = 0; i < galleryImages.length; i++) {
+                if (!currentlyDisplayed.has(i)) {
+                    availableImages.push(i);
+                }
+            }
+
+            // If we have available images, prioritize ones shown least recently
+            if (availableImages.length > 0) {
+                // Sort by how long ago they were shown (prefer images not in recent history)
+                availableImages.sort((a, b) => {
+                    const aLastIndex = imageUsageHistory.lastIndexOf(a);
+                    const bLastIndex = imageUsageHistory.lastIndexOf(b);
+                    return aLastIndex - bLastIndex; // Lower index = shown longer ago = higher priority
+                });
+
+                const selectedImage = availableImages[0];
+                imageUsageHistory.push(selectedImage);
+
+                // Keep history manageable (last 30 images)
+                if (imageUsageHistory.length > 30) {
+                    imageUsageHistory.shift();
+                }
+
+                return selectedImage;
+            }
+
+            // Fallback: cycle through gallery avoiding current display
+            let nextIndex = (mobileCurrentIndices[currentSlotIndex] + 7) % galleryImages.length;
+            let attempts = 0;
+            while (currentlyDisplayed.has(nextIndex) && attempts < galleryImages.length) {
+                nextIndex = (nextIndex + 1) % galleryImages.length;
+                attempts++;
+            }
+
+            imageUsageHistory.push(nextIndex);
+            if (imageUsageHistory.length > 30) {
+                imageUsageHistory.shift();
+            }
+
+            return nextIndex;
+        }
 
         function rotateMobileGallery() {
             // Only rotate if elements exist (i.e., on mobile)
@@ -490,11 +557,11 @@
 
             let indicesToRotate;
             if (mobileRotationPhase === 0) {
-                // Rotate positions 2 and 4 (array indices 1 and 3)
-                indicesToRotate = [1, 3];
+                // Rotate positions 2, 4, and 6 (array indices 1, 3, 5)
+                indicesToRotate = [1, 3, 5];
             } else {
-                // Rotate positions 1, 3, and 5 (array indices 0, 2, and 4)
-                indicesToRotate = [0, 2, 4];
+                // Rotate positions 1, 3, 5, and 7 (array indices 0, 2, 4, 6)
+                indicesToRotate = [0, 2, 4, 6];
             }
 
             // Fade out the images to be rotated
@@ -502,9 +569,10 @@
 
             setTimeout(() => {
                 indicesToRotate.forEach(i => {
-                    // Get next image index (cycle through gallery)
-                    mobileCurrentIndices[i] = (mobileCurrentIndices[i] + 5) % galleryImages.length;
-                    mobileImages[i].src = galleryImages[mobileCurrentIndices[i]];
+                    // Get next unique image using smart selection
+                    const nextImageIndex = getNextUniqueImage(i);
+                    mobileCurrentIndices[i] = nextImageIndex;
+                    mobileImages[i].src = galleryImages[nextImageIndex];
                     // Fade back in
                     mobileImages[i].classList.remove('fade');
                 });
