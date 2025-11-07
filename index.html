@@ -50,7 +50,7 @@
         /* Desktop: Hide side images below 1280px */
         @media (max-width: 1280px) {
             .side-images {
-                display: none;
+                display: none !important;
             }
         }
 
@@ -457,39 +457,65 @@
         setInterval(rotateImages, 5000);
 
         // Mobile gallery rotation
-        let mobileCurrentIndices = [0, 1, 2, 3, 4];
-        let mobileRotationIndex = 0;
+        const mobileImages = [
+            document.getElementById('mobileGallery1'),
+            document.getElementById('mobileGallery2'),
+            document.getElementById('mobileGallery3'),
+            document.getElementById('mobileGallery4'),
+            document.getElementById('mobileGallery5')
+        ];
+
+        // Initialize with random images from the gallery
+        let mobileCurrentIndices = [];
+        if (mobileImages[0]) {
+            // Create array of random unique indices
+            const availableIndices = Array.from({length: galleryImages.length}, (_, i) => i);
+            for (let i = 0; i < 5; i++) {
+                const randomIndex = Math.floor(Math.random() * availableIndices.length);
+                mobileCurrentIndices.push(availableIndices[randomIndex]);
+                availableIndices.splice(randomIndex, 1);
+            }
+
+            // Set initial random images
+            mobileImages.forEach((img, i) => {
+                img.src = galleryImages[mobileCurrentIndices[i]];
+            });
+        }
+
+        let mobileRotationPhase = 0; // 0 = rotate positions 1,3 (indices 1,3), 1 = rotate positions 0,2,4 (indices 0,2,4)
 
         function rotateMobileGallery() {
-            const mobileImages = [
-                document.getElementById('mobileGallery1'),
-                document.getElementById('mobileGallery2'),
-                document.getElementById('mobileGallery3'),
-                document.getElementById('mobileGallery4'),
-                document.getElementById('mobileGallery5')
-            ];
-
             // Only rotate if elements exist (i.e., on mobile)
             if (!mobileImages[0]) return;
 
-            // Fade out the current image
-            mobileImages[mobileRotationIndex].classList.add('fade');
+            let indicesToRotate;
+            if (mobileRotationPhase === 0) {
+                // Rotate positions 2 and 4 (array indices 1 and 3)
+                indicesToRotate = [1, 3];
+            } else {
+                // Rotate positions 1, 3, and 5 (array indices 0, 2, and 4)
+                indicesToRotate = [0, 2, 4];
+            }
+
+            // Fade out the images to be rotated
+            indicesToRotate.forEach(i => mobileImages[i].classList.add('fade'));
 
             setTimeout(() => {
-                // Update to next image in gallery
-                mobileCurrentIndices[mobileRotationIndex] = (mobileCurrentIndices[mobileRotationIndex] + 5) % galleryImages.length;
-                mobileImages[mobileRotationIndex].src = galleryImages[mobileCurrentIndices[mobileRotationIndex]];
-
-                // Fade back in
-                mobileImages[mobileRotationIndex].classList.remove('fade');
+                indicesToRotate.forEach(i => {
+                    // Get next image index (cycle through gallery)
+                    mobileCurrentIndices[i] = (mobileCurrentIndices[i] + 5) % galleryImages.length;
+                    mobileImages[i].src = galleryImages[mobileCurrentIndices[i]];
+                    // Fade back in
+                    mobileImages[i].classList.remove('fade');
+                });
             }, 1000);
 
-            // Move to next position for next rotation
-            mobileRotationIndex = (mobileRotationIndex + 1) % 5;
+            // Toggle rotation phase
+            mobileRotationPhase = 1 - mobileRotationPhase;
         }
 
-        // Rotate one mobile gallery image every 3 seconds
-        setInterval(rotateMobileGallery, 3000);
+        // Rotate mobile gallery images every 5 seconds (alternating pattern)
+        setInterval(rotateMobileGallery, 5000);
 
         function showForm() {
             document.getElementById('rsvpButton').style.display = 'none';
