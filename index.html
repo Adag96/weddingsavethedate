@@ -36,12 +36,34 @@
         .side-image.fade {
             opacity: 0;
         }
+
+        /* Hide mobile-specific elements on desktop */
+        .mobile-only {
+            display: none;
+        }
+
+        /* Hide desktop-specific elements on mobile */
+        .desktop-only {
+            display: block;
+        }
+
+        /* Desktop: Hide side images below 1280px */
         @media (max-width: 1280px) {
             .side-images {
                 display: none;
             }
         }
+
+        /* Mobile-specific styles (completely separate from desktop) */
         @media (max-width: 768px) {
+            /* Show mobile elements, hide desktop elements */
+            .mobile-only {
+                display: block;
+            }
+            .desktop-only {
+                display: none;
+            }
+
             /* Remove body padding for full-width content */
             body {
                 padding: 0 !important;
@@ -101,10 +123,17 @@
         <div class="container mx-auto max-w-2xl">
         <!-- Hero Image Section -->
         <div class="mb-8">
+            <!-- Desktop hero image -->
             <img
-                src="images/Test Photo.png"
+                src="images/Save the Date Header - Desktop.jpg"
                 alt="Adam & Daphne Save the Date"
-                class="w-full hero-image rounded-lg shadow-lg"
+                class="w-full hero-image rounded-lg shadow-lg desktop-only"
+            >
+            <!-- Mobile hero image -->
+            <img
+                src="images/Save the Date Header - Mobile.jpg"
+                alt="Adam & Daphne Save the Date"
+                class="w-full hero-image mobile-only"
             >
         </div>
 
